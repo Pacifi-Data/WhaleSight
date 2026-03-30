@@ -118,13 +118,17 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-  html {
-    @apply font-sans;
+  :root {
+    --background: 60 100% 95%; /* #FFFFCD (Cream) */
+    --foreground: 0 0% 0%;    /* Black Text */
+    
+    --card: 60 100% 95%;
+    --card-foreground: 0 0% 0%;
+    
+    --primary: 45 100% 50%;   /* #FFD200 (Yellow) */
+    --secondary: 221 66% 52%; /* #326DD5 (Blue) */
+    --accent: 14 77% 62%;    /* #F2674A (Coral) */
+    
+    --border: 0 0% 0%;        /* Sharp Black Borders */
   }
 }
