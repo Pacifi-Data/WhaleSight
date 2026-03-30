@@ -1,47 +1,36 @@
 import { getWhaleSentiment } from './elfa';
-import { getPacificaPositions } from './pacifica'; // Ensure this is exported in pacifica.ts
+import { getPacificaPositions } from './pacifica';
 
+// 1. Define the intent logic HERE
 export const analyzeAssetIntent = async (ticker: string) => {
   const cleanTicker = ticker.split('-')[0];
   const sentiment = await getWhaleSentiment(cleanTicker);
 
   const isBearish = sentiment && sentiment.score < 30;
-  const isHighVolume = sentiment && sentiment.mentions > 100;
-
+  
   return {
     score: sentiment?.score || 50,
-    mentions: sentiment?.mentions || 0,
-    whaleAlert: !!isBearish, 
-    narrative: isHighVolume ? "High Social Volatility" : "Stable"
+    whaleAlert: !!isBearish,
+    narrative: isBearish ? "High Bearish" : "Stable"
   };
 };
 
+// 2. Use it in the enrichment function
 export const getEnrichedPositions = async (walletAddress: string) => {
-  try {
-    // 1. Get raw positions from Pacifica
-    const positions = await getPacificaPositions(walletAddress);
+  const positions = await getPacificaPositions(walletAddress);
+  
+  // MOCK DATA FALLBACK (Keep this for the hackathon!)
+  const dataToUse = (!positions || positions.length === 0) 
+    ? [{ symbol: 'SOL-PERP', size: '100' }] 
+    : positions;
 
-    // FIX: Check if positions exists and is an array. 
-    // If Pacifica returns void/null, we default to an empty array [].
-    if (!positions || !Array.isArray(positions)) {
-      console.warn("WhaleSight: No positions found for this wallet.");
-      return [];
-    }
-
-    // 2. Map through them
-    const enriched = await Promise.all(positions.map(async (pos: any) => {
-      const intent = await analyzeAssetIntent(pos.symbol || pos.asset || 'SOL');
-      return {
-        ...pos,
-        socialScore: intent.score,
-        whaleAlert: intent.whaleAlert,
-        narrative: intent.narrative
-      };
-    }));
-
-    return enriched;
-  } catch (error) {
-    console.error("Engine failure:", error);
-    return []; // Always return an array to keep the UI from crashing
-  }
+  return Promise.all(dataToUse.map(async (pos: any) => {
+    const intent = await analyzeAssetIntent(pos.symbol || 'SOL');
+    return {
+      ...pos,
+      asset: pos.symbol || 'SOL',
+      socialAlpha: intent.score,
+      whaleAlert: intent.whaleAlert
+    };
+  }));
 };
