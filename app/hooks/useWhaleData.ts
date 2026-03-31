@@ -9,6 +9,7 @@ export interface WhalePosition {
   liquidationPrice?: number | string;
   socialAlpha?: string | number;
   whaleAlert?: boolean;
+  poolLiquidity?: number;
 }
 
 export function useWhaleData(walletAddress: string) {
