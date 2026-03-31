@@ -1,41 +1,36 @@
-import { useState, useEffect, useCallback } from 'react';
-
-// ADD 'export' HERE so other files can see it
-export interface WhalePosition {
-  id?: string;
-  asset?: string;
-  size?: string;
-  markPrice?: number | string;
-  liquidationPrice?: number | string;
-  socialAlpha?: string | number;
-  whaleAlert?: boolean;
-  poolLiquidity?: number;
+import { useState, useEffect } from 'react';
+export interface WhalePosition {  // <--- Add 'export' here
+  id: string;
+  asset: string;
+  size: string;
+  rawSize: number;
+  markPrice: number;
+  socialAlpha: number;
+  whaleAlert: boolean;
 }
-
-export function useWhaleData(walletAddress: string) {
-  const [data, setData] = useState<WhalePosition[]>([]); // Use the interface here
+export function useWhaleData(address: string) {
+  const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const refreshData = useCallback(async () => {
-    if (!walletAddress) return;
-    try {
-      const response = await fetch(`/api/whale?address=${walletAddress}`);
-      const enriched = await response.json();
-      if (Array.isArray(enriched)) {
-        setData(enriched);
-      }
-    } catch (error) {
-      console.error("Fetch error:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [walletAddress]);
-
   useEffect(() => {
-    refreshData();
-    const interval = setInterval(refreshData, 30000);
-    return () => clearInterval(interval);
-  }, [refreshData]);
+    let isMounted = true;
+    
+    async function fetchData() {
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/whale?address=${address}`);
+        const json = await res.json();
+        if (isMounted) setData(json);
+      } catch (err) {
+        console.error("Fetch error", err);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+
+    fetchData();
+    return () => { isMounted = false; };
+  }, [address]); // This triggers the reload when the address changes
 
   return { data, loading };
 }

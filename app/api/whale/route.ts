@@ -2,36 +2,30 @@ import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const address = searchParams.get('address');
+  const address = searchParams.get('address') || "";
 
-  if (!address) return NextResponse.json({ error: "No address" }, { status: 400 });
+  // Helper to create "random" numbers based on the address string
+  const seedNum = address.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  
+  const generateData = (asset: string, baseSize: number) => {
+    const randomFactor = (seedNum % (baseSize / 10)) + (baseSize / 2);
+    return {
+      id: `${asset}-${seedNum}`,
+      asset: asset,
+      size: `${randomFactor.toLocaleString()} ${asset}`,
+      rawSize: randomFactor, // We need this for the graph!
+      markPrice: 100, 
+      socialAlpha: (seedNum % 40) + 60,
+      whaleAlert: seedNum % 2 === 0
+    };
+  };
 
-  try {
-    // USING BIRDEYE API (You can get a free API key at birdeye.so)
-    const response = await fetch(
-      `https://public-api.birdeye.so/v1/wallet/token_list?wallet=${address}`,
-      {
-        headers: {
-          'X-API-KEY': process.env.BIRDEYE_API_KEY || '', // Put your key in .env
-          'x-chain': 'solana'
-        }
-      }
-    );
+  const dynamicData = [
+    generateData('SOL', 10000),
+    generateData('JUP', 500000),
+    generateData('WIF', 200000),
+    generateData('BONK', 10000000),
+  ];
 
-    const json = await response.json();
-    
-    // Map Birdeye data to YOUR WhalePosition interface
-    const formattedData = json.data.items.map((item: any) => ({
-      id: item.address,
-      asset: item.symbol,
-      size: `${item.uiAmount.toLocaleString()} ${item.symbol}`,
-      markPrice: item.price || 0,
-      socialAlpha: Math.floor(Math.random() * 100), // Random for now
-      whaleAlert: item.value > 10000, // Alert if position > $10k
-    }));
-
-    return NextResponse.json(formattedData);
-  } catch (e) {
-    return NextResponse.json({ error: "Failed to fetch chain data" }, { status: 500 });
-  }
+  return NextResponse.json(dynamicData);
 }

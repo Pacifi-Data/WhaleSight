@@ -1,75 +1,76 @@
 "use client";
 
-import React, { useMemo } from 'react';
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+import React, { useMemo } from "react";
+import { motion } from "framer-motion";
 
-interface ChartProps {
-  data: any[];
-  isLoading: boolean;
-}
-
-export function AccountActivityChart({ data, isLoading }: ChartProps) {
+export function AccountActivityChart({ data, isLoading }: { data: any[], isLoading: boolean }) {
   const chartData = useMemo(() => {
-    if (!data || !Array.isArray(data)) return [];
+    if (!data || data.length === 0) return [];
 
-    return data.map((item) => {
-      // Extract number from string like "50.5 SOL" or "1000 USDC"
-      const rawSize = typeof item.size === 'string' 
-        ? item.size.replace(/[^\d.-]/g, '') 
-        : item.size;
-      
-      const numericValue = parseFloat(rawSize) || 0;
-
-      return {
-        name: item.asset || "Unknown",
-        value: numericValue,
-        fullLabel: item.size // Keep for tooltip
+    // CLEANING THE DATA: Convert "1,200,000 JUP" -> 1200000
+    const parsed = data.map(item => {
+      const stringSize = String(item.size || "0");
+      const numericValue = parseFloat(stringSize.replace(/,/g, '').split(' ')[0]);
+      return { 
+        ...item, 
+        val: isNaN(numericValue) ? 0 : numericValue 
       };
     });
+
+    const maxVal = Math.max(...parsed.map(d => d.val), 1);
+
+    return parsed.map(d => ({
+      ...d,
+      // Calculate percentage: (Current / Max) * 100
+      // We add Math.max(..., 10) so the bar is never 0px tall
+      displayHeight: Math.max((d.val / maxVal) * 100, 10) 
+    }));
   }, [data]);
 
-  if (isLoading || chartData.length === 0) {
-    return (
-      <div className="h-[300px] flex flex-col items-center justify-center font-mono text-black uppercase tracking-widest">
-        <div className="animate-spin mb-2">/</div>
-        <p className="text-[10px] font-black">Syncing_Chain_Data...</p>
-      </div>
-    );
-  }
+  if (isLoading) return <div className="h-64 flex items-center justify-center font-black animate-pulse">LOADING_DATA_CHART...</div>;
 
   return (
-    <div className="h-[300px] w-full">
-      <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#00000020" />
-          <XAxis 
-            dataKey="name" 
-            axisLine={false} 
-            tickLine={false} 
-            tick={{ fill: '#000', fontSize: 10, fontWeight: '900' }} 
-          />
-          <YAxis axisLine={false} tickLine={false} tick={false} />
-          <Tooltip 
-            cursor={{ stroke: '#000', strokeWidth: 2 }}
-            contentStyle={{ 
-              backgroundColor: '#FFD200', 
-              border: '4px solid black', 
-              borderRadius: '0px', 
-              fontFamily: 'monospace',
-              fontWeight: '900'
-            }} 
-          />
-          <Area 
-            type="stepAfter" 
-            dataKey="value" 
-            stroke="#326DD5" 
-            strokeWidth={4} 
-            fill="#326DD5" 
-            fillOpacity={0.4} 
-            animationDuration={1000}
-          />
-        </AreaChart>
-      </ResponsiveContainer>
+    <div className="h-80 w-full bg-white border-4 border-black p-8 relative flex items-end justify-around gap-2 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+      {/* Y-Axis Indicator Line */}
+      <div className="absolute left-0 w-full h-[2px] bg-black/10 border-dashed border-b bottom-[20%]" />
+      <div className="absolute left-0 w-full h-[2px] bg-black/10 border-dashed border-b bottom-[50%]" />
+      <div className="absolute left-0 w-full h-[2px] bg-black/10 border-dashed border-b bottom-[80%]" />
+
+      {chartData.map((item, i) => (
+        <div key={i} className="relative flex-1 flex flex-col items-center group h-full justify-end">
+          
+          {/* THE DYNAMIC BAR */}
+          <motion.div
+            initial={{ height: 0 }}
+            animate={{ height: `${item.displayHeight}%` }}
+            transition={{ type: "spring", stiffness: 120, damping: 12 }}
+            className="w-full max-w-[50px] bg-[#326DD5] border-4 border-black relative group-hover:bg-[#FFD200] transition-colors"
+          >
+            {/* Glossy Overlay */}
+            <div className="absolute top-0 left-0 w-full h-full bg-white/10 pointer-events-none" />
+            
+            {/* Size Label on Top */}
+            <div className="absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black text-white text-[10px] px-2 py-1 whitespace-nowrap z-50">
+              {item.size}
+            </div>
+          </motion.div>
+
+          {/* ASSET NAME */}
+          <span className="mt-4 font-black italic text-xs uppercase tracking-tighter">
+            {item.asset}
+          </span>
+          
+          {/* Visual Percentage Tag */}
+          <span className="text-[8px] font-mono text-slate-400">
+            {Math.round(item.displayHeight)}%_ALLOC
+          </span>
+        </div>
+      ))}
+
+      {/* Side Label */}
+      <div className="absolute -left-10 top-1/2 -rotate-90 text-[10px] font-black uppercase tracking-widest text-slate-300">
+        Inventory_Weight
+      </div>
     </div>
   );
 }
