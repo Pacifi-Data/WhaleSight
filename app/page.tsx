@@ -20,7 +20,7 @@ export default function LandingPage() {
               Intelligent Whale Tracking // Modular Node v1.0
             </p>
           </div>
-          <div className="font-mono text-[9px] text-zinc-500 uppercase flex items-center gap-1.5 bg-black/5 px-2 py-0.5 rounded">
+          <div className="font-mono text-[9px] text-zinc-500 uppercase flex items-center gap-1.5 bg-black/5 px-2 py-0.5 rounded border border-black/10">
             <div className="h-2 w-2 rounded-full bg-emerald-600 animate-pulse" />
             STATUS: UPLINK_READY
           </div>
@@ -29,7 +29,7 @@ export default function LandingPage() {
         {/* 2. HERO AREA */}
         <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col md:grid md:grid-cols-2 border-4 border-black bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] md:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] min-h-0 overflow-hidden relative">
           
-          {/* MOBILE TEXT CONTENT (Top on mobile) */}
+          {/* MOBILE TEXT CONTENT */}
           <div className="flex md:hidden flex-col p-6 space-y-3 bg-white order-1">
             <div className="inline-block self-start bg-[#FFD200] border-2 border-black px-2 py-0.5 text-[10px] font-black uppercase">
               SYSTEM_READY
@@ -43,43 +43,62 @@ export default function LandingPage() {
             </p>
           </div>
 
-          {/* WHALE IMAGE (Second on mobile) */}
-          <div className="relative flex items-center justify-center bg-[#326DD5] p-4 md:p-8 order-2 h-64 md:h-full overflow-hidden group border-b-4 md:border-b-0 border-black">
+          {/* WHALE IMAGE - RADAR ENABLED */}
+          <div className="relative flex items-center justify-center bg-[#326DD5] p-2 md:p-6 order-2 h-72 md:h-full overflow-hidden group border-b-4 md:border-b-0 border-black">
             <motion.div 
               animate={{ y: [0, -5, 0] }} 
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
               className="relative w-full h-full border-4 border-black bg-white overflow-hidden shadow-[6px_6px_0px_0px_rgba(0,0,0,0.3)]"
             >
-              <img 
+              <motion.img 
                 src="/WhaleSight-Landing.jpg" 
                 alt="Whale Visual" 
-                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+                initial={{ scale: 1.1 }} // Slight zoom out effect
+                whileHover={{ scale: 1.2 }}
+                transition={{ duration: 0.8 }}
+                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
               />
-              <div className="absolute top-0 right-0 w-8 h-8 bg-[#F2674A] border-l-4 border-b-4 border-black" />
-              {/* Scanline Effect */}
-              <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_4px,3px_100%]" />
+              
+              {/* RADAR RED SCANLINE */}
+              <motion.div 
+                animate={{ top: ['-10%', '110%'] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
+                className="absolute left-0 w-full h-[3px] bg-red-600 shadow-[0_0_20px_5px_rgba(220,38,38,0.8)] z-30 pointer-events-none" 
+              />
+
+              {/* Bauhaus Corner */}
+              <div className="absolute top-0 right-0 w-8 h-8 bg-[#F2674A] border-l-4 border-b-4 border-black z-40" />
+
+              {/* Static UI Text Overlay */}
+              <div className="absolute bottom-0 left-0 bg-black text-white px-2 py-1 font-mono text-[9px] uppercase tracking-tighter z-40">
+                RADAR_ID: <span className="text-[#FFD200]">ALPHA_WHALE_01</span>
+              </div>
+              
+              {/* Screen Grain Texture */}
+              <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%)] bg-[length:100%_4px] opacity-20 z-20" />
             </motion.div>
           </div>
 
-          {/* MOBILE BUTTON (Third on mobile) */}
+          {/* MOBILE BUTTON */}
           <div className="flex md:hidden p-6 bg-white order-3">
             <Link href="/dashboard" className="w-full text-center bg-[#FFD200] border-4 border-black py-4 text-xl font-black uppercase hover:bg-[#326DD5] hover:text-white transition-all shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:shadow-none">
               Launch Application
             </Link>
           </div>
 
-          {/* DESKTOP CONTENT (Hidden on mobile) */}
+          {/* DESKTOP CONTENT */}
           <div className="hidden md:flex p-10 flex-col justify-center space-y-6 border-r-4 border-black bg-white md:order-1">
             <div className="inline-block self-start bg-[#FFD200] border-2 border-black px-2 py-0.5 text-[10px] font-black uppercase">
-              SYSTEM_READY
+              SYSTEM READY
             </div>
             <h2 className="text-7xl font-black uppercase leading-[0.8] tracking-tighter italic">
               Identify <br />
-              <span className="text-[#326DD5]">Movement.</span>
+              <span className="text-[#326DD5]">Movement</span>
             </h2>
-            <p className="text-base max-w-sm leading-tight border-l-4 border-[#FFD200] pl-4 font-medium italic py-1">
-              Real-time intent analysis for Pacifica. Decode whale behavior through social alpha.
-            </p>
+<p className="text-base max-w-sm leading-tight border-l-4 border-[#FFD200] pl-4 font-medium italic py-1">
+  <span className="block mb-1">Real-time intent analysis for Pacifica.</span>
+  <span className="block text-[#326DD5] font-black">Decode whale behavior through social alpha.</span>
+</p>
             <div className="pt-4 flex items-center gap-6">
               <Link href="/dashboard" className="inline-block text-center bg-[#FFD200] border-4 border-black py-3 px-8 text-lg font-black uppercase hover:bg-[#326DD5] hover:text-white transition-all shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:shadow-none">
                  Launch Application
