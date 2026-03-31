@@ -73,7 +73,7 @@ export function StatsTable({ data, loading }: { data: WhalePosition[], loading: 
                     {/* ASSET NAME */}
                     <td className="p-6 border-r-4 border-black relative overflow-hidden">
                       {/* Suble scanning light on hover */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#326DD5]/5 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite] pointer-events-none" />
+                      <div className="absolute inset-0 bg-linear-to-r from-transparent via-[#326DD5]/5 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite] pointer-events-none" />
                       
                       <div className="flex items-baseline gap-2 relative z-10">
                         <span className="text-4xl font-black italic tracking-tighter uppercase group-hover:text-[#326DD5] transition-colors">

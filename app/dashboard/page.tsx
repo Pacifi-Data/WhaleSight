@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link"; // Added Link
+import Link from "next/link";
 import { useWhaleData } from "../hooks/useWhaleData";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -10,8 +10,9 @@ import { StatsTable } from "@/components/StatsTable";
 import { AccountActivityChart } from "@/components/AccountActivityChart";
 import { TacticalFeed } from "@/components/TacticalFeed";
 import { ActivityRadar } from "@/components/ActivityRadar";
+import { WhaleHeatmap } from "@/components/WhaleHeatmap";
 import { Card } from "@/components/ui/card";
-import { ChevronLeft } from "lucide-react"; // Optional: for a back icon
+import { ChevronLeft } from "lucide-react";
 
 const WATCHLIST = [
   { name: "SOL_LEGEND", address: "pDbTNSJMQ7MMwZvFtWJLiUz9fMY6tMU7CPv8CkPQ39A" },
@@ -32,62 +33,65 @@ export default function Dashboard() {
     setTimeout(() => setIsScanning(false), 800);
   };
 
+  // TVL Calculation: Safely handles the generated 'amount' from your route
   const calculatedTVL = Array.isArray(data) 
     ? data.reduce((acc, curr) => {
         const val = typeof curr.size === 'string' 
           ? parseFloat(curr.size.replace(/[^\d.-]/g, '')) 
-          : (curr.size || 0);
+          : (curr.amount || 0);
         return acc + (isNaN(val) ? 0 : val);
       }, 0) 
     : 0;
 
   return (
     <main className={`min-h-screen bg-[#FFFFCD] p-6 text-black font-medium selection:bg-[#326DD5] selection:text-white transition-all duration-300 ${isScanning ? 'brightness-125 saturate-150' : ''}`}>
+      
+      {/* 0. Top Navigation (Fixed Marquee) */}
       <Marquee />
-<div className="pt-20 p-6 max-w-6xl mx-auto space-y-8 relative">
-  
-  {/* --- OUTSIDE LANDING BUTTON (Desktop Only) --- */}
-  <div className="hidden lg:block absolute left-[-140px] top-[105px]">
-    <Link href="/">
-      <button className="flex items-center gap-2 bg-white border-4 border-black px-4 py-2 font-black uppercase text-[10px] italic shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#FFD200] hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all group">
-        <ChevronLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
-        Landing
-      </button>
-    </Link>
-  </div>
 
-  {/* 1. Header & Radar (Main Content Box) */}
-  <header className="border-b-4 border-black pb-6 flex flex-col md:flex-row justify-between items-center gap-6">
-    
-    {/* MOBILE ONLY LANDING BUTTON (Stays inside for small screens) */}
-    <div className="lg:hidden self-start mb-4">
-      <Link href="/">
-        <button className="flex items-center gap-2 bg-white border-4 border-black px-3 py-1.5 font-black uppercase text-[9px] italic shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-          <ChevronLeft className="w-3 h-3" />
-          Landing
-        </button>
-      </Link>
-    </div>
+      <div className="pt-24 p-6 max-w-6xl mx-auto space-y-8 relative">
+        
+        {/* --- SIDEBAR LANDING BUTTON --- */}
+        <div className="hidden lg:block absolute -left-35 top-26.25">
+          <Link href="/">
+            <button className="flex items-center gap-2 bg-white border-4 border-black px-4 py-2 font-black uppercase text-[10px] italic shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#FFD200] hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all group">
+              <ChevronLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
+              Landing
+            </button>
+          </Link>
+        </div>
 
-    <div className="text-center md:text-left">
-      <h1 className="text-6xl font-black tracking-tighter uppercase italic leading-none">
-        WHALE<span className="text-[#326DD5]">SIGHT</span>
-      </h1>
-      <p className="font-mono text-sm mt-2 flex items-center gap-2 justify-center md:justify-start">
-        <span className="h-2 w-2 rounded-full bg-red-600 animate-ping" />
-        TARGET_ID: {activeAddress.slice(0, 14)}...
-      </p>
-    </div>
-    
-    <ActivityRadar />
-  </header>
-        {/* 2. Intelligence Summary Bar */}
+        {/* 1. Header & Radar */}
+        <header className="border-b-4 border-black pb-6 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="lg:hidden self-start mb-4">
+            <Link href="/">
+              <button className="flex items-center gap-2 bg-white border-4 border-black px-3 py-1.5 font-black uppercase text-[9px] italic shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                <ChevronLeft className="w-3 h-3" />
+                Landing
+              </button>
+            </Link>
+          </div>
+
+          <div className="text-center md:text-left">
+            <h1 className="text-6xl font-black tracking-tighter uppercase italic leading-none">
+              WHALE<span className="text-[#326DD5]">SIGHT</span>
+            </h1>
+            <p className="font-mono text-sm mt-2 flex items-center gap-2 justify-center md:justify-start">
+              <span className="h-2 w-2 rounded-full bg-red-600 animate-ping" />
+              TARGET_ID: {activeAddress.slice(0, 14)}...
+            </p>
+          </div>
+          
+          <ActivityRadar />
+        </header>
+
+        {/* 2. Dynamic Intelligence Summary Bar */}
         <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { label: "STRATEGIC_INTENT", value: "ACCUMULATION", color: "text-emerald-600" },
+            { label: "STRATEGIC_INTENT", value: data?.[0]?.strategic_intent || "ANALYZING", color: "text-emerald-600" },
             { label: "WHALE_TYPE", value: "INSTITUTIONAL", color: "text-[#326DD5]" },
-            { label: "MARKET_BIAS", value: "BULLISH_SOL", color: "text-[#FFD200]" },
-            { label: "ALPHA_SIGNAL", value: "STABLE", color: "text-black" },
+            { label: "MARKET_BIAS", value: data?.[0]?.asset === 'SOL' ? "BULLISH_SOL" : "NEUTRAL", color: "text-[#FFD200]" },
+            { label: "ALPHA_SIGNAL", value: parseInt(data?.[0]?.alpha_score) > 80 ? "STRONG" : "STABLE", color: "text-black" },
           ].map((stat, i) => (
             <div key={i} className="border-4 border-black bg-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
               <p className="text-[9px] font-black uppercase opacity-40">{stat.label}</p>
@@ -127,17 +131,20 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* 4. Assets Table */}
+        {/* 4. PACIFICA HEATMAP (Visual Context) */}
+        <WhaleHeatmap data={data || []} />
+
+        {/* 5. Assets Table */}
         <div className="border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white overflow-hidden">
           <StatsTable data={data} loading={isLoading} />
         </div>
 
-        {/* 5. Analytics Grid */}
+        {/* 6. Analytics Grid */}
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
             <div className="flex justify-between items-center mb-6">
               <span className="text-[10px] font-black uppercase tracking-[0.2em] bg-black text-white px-2 py-1">Distribution_Map</span>
-              <span className="text-[10px] font-black text-slate-400">REAL_TIME_NODE</span>
+              <span className="text-[10px] font-black text-slate-400">REAL TIME NODE</span>
             </div>
             <AccountActivityChart data={data} isLoading={isLoading} />
           </div>
@@ -149,14 +156,14 @@ export default function Dashboard() {
                <h4 className="text-4xl font-black mt-2">
                  ${calculatedTVL > 0 ? calculatedTVL.toLocaleString(undefined, { minimumFractionDigits: 2 }) : "0.00"}
                </h4>
-               <p className="text-[10px] font-mono mt-2 opacity-60 italic">STAGED_FOR_EXTRACTION</p>
+               <p className="text-[10px] font-mono mt-2 opacity-60 italic">STAGED FOR EXTRACTION</p>
              </Card>
           </div>
         </section>
 
         {/* Footer */}
         <footer className="flex justify-between font-mono text-xs uppercase pt-10 border-t-2 border-black/10">
-          <span className="font-bold text-black/30 italic">BKK_NODE_01_PACIFICA</span>
+          <span className="font-bold text-black/30 italic">BKK NODE 01 PACIFICA</span>
           <span className="bg-[#F2674A] px-3 py-1 text-white font-bold italic shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">CLASSIFIED</span>
         </footer>
       </div>

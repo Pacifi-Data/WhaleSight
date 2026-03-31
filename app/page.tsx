@@ -63,7 +63,7 @@ export default function LandingPage() {
               <motion.div 
                 animate={{ top: ['-10%', '110%'] }}
                 transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
-                className="absolute left-0 w-full h-[3px] bg-red-600 shadow-[0_0_20px_5px_rgba(220,38,38,0.8)] z-30 pointer-events-none" 
+                className="absolute left-0 w-full h-0.75 bg-red-600 shadow-[0_0_20px_5px_rgba(220,38,38,0.8)] z-30 pointer-events-none" 
               />
 
               {/* Bauhaus Corner */}
@@ -75,7 +75,7 @@ export default function LandingPage() {
               </div>
               
               {/* Screen Grain Texture */}
-              <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%)] bg-[length:100%_4px] opacity-20 z-20" />
+              <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%)] bg-size-[100%_4px] opacity-20 z-20" />
             </motion.div>
           </div>
 
