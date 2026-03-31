@@ -1,92 +1,118 @@
-// app/page.tsx
 "use client";
 
 import Link from "next/link";
-import { WhaleHeader } from "@/components/WhaleHeader"; // Reuse your header
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { motion } from "framer-motion";
 import { PageTransition } from "@/components/PageTransition";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function LandingPage() {
   return (
     <PageTransition>
-    <main className="min-h-screen bg-[#FFFFCD] p-6 text-black selection:bg-[#326DD5]/20 selection:text-white">
-      <div className="max-w-7xl mx-auto space-y-16">
+      <main className="min-h-screen md:h-screen w-full bg-[#FFFFCD] p-4 md:p-6 text-black flex flex-col md:grid md:grid-rows-[auto_1fr_auto] selection:bg-[#326DD5]/20 overflow-x-hidden md:overflow-hidden gap-4 md:gap-6">
         
-        {/* Reuse your existing branding header! */}
-        <div className="border-b-4 border-black pb-6">
-          <h1 className="text-6xl font-black tracking-tighter uppercase italic">
-            WHALE<span className="text-[#326DD5]">SIGHT</span>
-          </h1>
-          <p className="font-mono text-sm mt-2 uppercase tracking-widest text-zinc-600">
-            Intelligent Whale Tracking // Modular Node v1.0
-          </p>
+        {/* 1. HEADER */}
+        <header className="max-w-7xl mx-auto w-full border-b-4 border-black pb-2 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2">
+          <div>
+            <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic leading-none">
+              WHALE<span className="text-[#326DD5]">SIGHT</span>
+            </h1>
+            <p className="font-mono text-[10px] uppercase tracking-widest text-zinc-600 mt-1">
+              Intelligent Whale Tracking // Modular Node v1.0
+            </p>
+          </div>
+          <div className="font-mono text-[9px] text-zinc-500 uppercase flex items-center gap-1.5 bg-black/5 px-2 py-0.5 rounded">
+            <div className="h-2 w-2 rounded-full bg-emerald-600 animate-pulse" />
+            STATUS: UPLINK_READY
+          </div>
+        </header>
+
+        {/* 2. HERO AREA */}
+        <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col md:grid md:grid-cols-2 border-4 border-black bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] md:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] min-h-0 overflow-hidden relative">
+          
+          {/* MOBILE TEXT CONTENT (Top on mobile) */}
+          <div className="flex md:hidden flex-col p-6 space-y-3 bg-white order-1">
+            <div className="inline-block self-start bg-[#FFD200] border-2 border-black px-2 py-0.5 text-[10px] font-black uppercase">
+              SYSTEM_READY
+            </div>
+            <h2 className="text-4xl font-black uppercase leading-[0.9] tracking-tighter italic">
+              Identify <br />
+              <span className="text-[#326DD5]">Movement.</span>
+            </h2>
+            <p className="text-xs max-w-sm leading-tight border-l-4 border-[#FFD200] pl-4 font-medium italic">
+              Real-time intent analysis for Pacifica. Decode whale behavior through social alpha.
+            </p>
+          </div>
+
+          {/* WHALE IMAGE (Second on mobile) */}
+          <div className="relative flex items-center justify-center bg-[#326DD5] p-4 md:p-8 order-2 h-64 md:h-full overflow-hidden group border-b-4 md:border-b-0 border-black">
+            <motion.div 
+              animate={{ y: [0, -5, 0] }} 
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="relative w-full h-full border-4 border-black bg-white overflow-hidden shadow-[6px_6px_0px_0px_rgba(0,0,0,0.3)]"
+            >
+              <img 
+                src="/WhaleSight-Landing.jpg" 
+                alt="Whale Visual" 
+                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+              />
+              <div className="absolute top-0 right-0 w-8 h-8 bg-[#F2674A] border-l-4 border-b-4 border-black" />
+              {/* Scanline Effect */}
+              <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_4px,3px_100%]" />
+            </motion.div>
+          </div>
+
+          {/* MOBILE BUTTON (Third on mobile) */}
+          <div className="flex md:hidden p-6 bg-white order-3">
+            <Link href="/dashboard" className="w-full text-center bg-[#FFD200] border-4 border-black py-4 text-xl font-black uppercase hover:bg-[#326DD5] hover:text-white transition-all shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:shadow-none">
+              Launch Application
+            </Link>
+          </div>
+
+          {/* DESKTOP CONTENT (Hidden on mobile) */}
+          <div className="hidden md:flex p-10 flex-col justify-center space-y-6 border-r-4 border-black bg-white md:order-1">
+            <div className="inline-block self-start bg-[#FFD200] border-2 border-black px-2 py-0.5 text-[10px] font-black uppercase">
+              SYSTEM_READY
+            </div>
+            <h2 className="text-7xl font-black uppercase leading-[0.8] tracking-tighter italic">
+              Identify <br />
+              <span className="text-[#326DD5]">Movement.</span>
+            </h2>
+            <p className="text-base max-w-sm leading-tight border-l-4 border-[#FFD200] pl-4 font-medium italic py-1">
+              Real-time intent analysis for Pacifica. Decode whale behavior through social alpha.
+            </p>
+            <div className="pt-4 flex items-center gap-6">
+              <Link href="/dashboard" className="inline-block text-center bg-[#FFD200] border-4 border-black py-3 px-8 text-lg font-black uppercase hover:bg-[#326DD5] hover:text-white transition-all shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:shadow-none">
+                 Launch Application
+              </Link>
+              <motion.span animate={{ x: [0, 5, 0] }} transition={{ duration: 1.5, repeat: Infinity }} className="text-[#FFD200] text-3xl font-bold">
+                &rarr;
+              </motion.span>
+            </div>
+          </div>
         </div>
 
-        {/* Hero Section: The "Bauhaus Waterfall" */}
-        <div className="grid md:grid-cols-2 gap-0 border-4 border-black bg-white shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
-  
-  {/* Text Side - Responsive Padding */}
-  <div className="p-8 md:p-12 flex flex-col justify-center space-y-6 border-b-4 md:border-b-0 md:border-r-4 border-black">
-    <div className="inline-block self-start bg-[#FFD200] border-2 border-black px-3 py-1 text-[10px] font-black uppercase">
-      SYSTEM_READY
-    </div>
-    <h2 className="text-5xl md:text-7xl font-black uppercase leading-[0.85] tracking-tighter italic">
-      Identify <br />
-      <span className="text-[#326DD5]">Movement.</span>
-    </h2>
-    <p className="text-lg md:text-xl max-w-sm leading-tight border-l-4 border-[#FFD200] pl-4 font-medium">
-      Real-time intent analysis for Pacifica. Decode whale behavior through social alpha.
-    </p>
-    
-    <Link href="/dashboard" className="inline-block text-center bg-[#FFD200] border-4 border-black py-4 px-8 text-xl font-black uppercase hover:bg-[#326DD5] hover:text-white transition-all shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-[2px] active:translate-y-[2px]">
-      Launch Application
-    </Link>
-  </div>
-
-  {/* Image Side - Responsive & Scaled */}
-  <div className="relative aspect-square md:aspect-auto flex items-center justify-center bg-[#326DD5] p-4">
-    {/* The Frame */}
-    <div className="relative w-full h-full border-4 border-black bg-white overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,0.2)]">
-      <img 
-        src="/WhaleSight-Landing.jpg" 
-        alt="Whale Breach" 
-        className="w-full h-full object-contain p-2 hover:scale-105 transition-transform duration-500"
-      />
-      
-      {/* Bauhaus Decorative Elements */}
-      <div className="absolute top-0 right-0 w-12 h-12 bg-[#F2674A] border-l-4 border-b-4 border-black hidden sm:block" />
-      <div className="absolute bottom-0 left-0 bg-black text-white px-3 py-1 font-mono text-[10px] uppercase">
-        Asset_Preview_01
-      </div>
-    </div>
-  </div>
-</div>
-
-        {/* Modular Feature Grid */}
-        <div className="grid md:grid-cols-3 gap-8">
+        {/* 3. FEATURE BOXES */}
+        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 pb-2">
           {[
-            { title: "POSITION_TRACKING", color: "#FFD200", desc: "Monitor testnet portfolio balances." },
-            { title: "INTENT_ANALYSIS", color: "#326DD5", desc: "Decode whale sentiment on-chain." },
-            { title: "CONFIDENTIAL_REPORT", color: "#F2674A", desc: "Receive classified risk assessment alerts." },
-          ].map((feature) => (
-            <Card key={feature.title} className="bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rounded-none">
-              <CardHeader className="border-b-4 border-black" style={{ backgroundColor: feature.color }}>
-                <CardTitle className={`text-xl font-black uppercase text-center ${feature.color === "#326DD5" ? 'text-white' : 'text-black'}`}>
-                  {feature.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-6 font-medium">
-                <p>{feature.desc}</p>
-              </CardContent>
-            </Card>
+            { title: "TRACKING", color: "#FFD200", desc: "Monitor testnet portfolio balances." },
+            { title: "INTENT", color: "#326DD5", desc: "Decode whale sentiment on-chain." },
+            { title: "ALERTS", color: "#F2674A", desc: "Receive classified risk assessments." },
+          ].map((feature, i) => (
+            <motion.div key={feature.title} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + (i * 0.1) }}>
+              <Card className="bg-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-none h-24 md:h-28 overflow-hidden flex flex-col group hover:-translate-y-1 transition-transform cursor-pointer">
+                <CardHeader className="p-1 border-b-2 border-black" style={{ backgroundColor: feature.color }}>
+                  <CardTitle className={`text-[10px] md:text-xs font-black uppercase text-center ${feature.color === "#326DD5" ? 'text-white' : 'text-black'}`}>
+                    {feature.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-2 md:p-3 flex items-center justify-center h-full">
+                  <p className="text-[10px] md:text-[11px] leading-tight font-bold text-center uppercase">{feature.desc}</p>
+                </CardContent>
+              </Card>
+            </motion.div>
           ))}
         </div>
-
-        <footer className="text-center font-mono text-[10px] text-zinc-500 uppercase pt-20">
-          Secure Node Connection // Location: {process.env.NEXT_PUBLIC_NODE_LOC || "BANGKOK"}
-        </footer>
-      </div>
-    </main>
+      </main>
     </PageTransition>
   );
 }
