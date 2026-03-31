@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link"; // Added Link
 import { useWhaleData } from "../hooks/useWhaleData";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -8,8 +9,9 @@ import { Marquee } from "@/components/Marquee";
 import { StatsTable } from "@/components/StatsTable";
 import { AccountActivityChart } from "@/components/AccountActivityChart";
 import { TacticalFeed } from "@/components/TacticalFeed";
-import { ActivityRadar } from "@/components/ActivityRadar"; // New Component
+import { ActivityRadar } from "@/components/ActivityRadar";
 import { Card } from "@/components/ui/card";
+import { ChevronLeft } from "lucide-react"; // Optional: for a back icon
 
 const WATCHLIST = [
   { name: "SOL_LEGEND", address: "pDbTNSJMQ7MMwZvFtWJLiUz9fMY6tMU7CPv8CkPQ39A" },
@@ -42,23 +44,43 @@ export default function Dashboard() {
   return (
     <main className={`min-h-screen bg-[#FFFFCD] p-6 text-black font-medium selection:bg-[#326DD5] selection:text-white transition-all duration-300 ${isScanning ? 'brightness-125 saturate-150' : ''}`}>
       <Marquee />
+<div className="pt-20 p-6 max-w-6xl mx-auto space-y-8 relative">
+  
+  {/* --- OUTSIDE LANDING BUTTON (Desktop Only) --- */}
+  <div className="hidden lg:block absolute left-[-140px] top-[105px]">
+    <Link href="/">
+      <button className="flex items-center gap-2 bg-white border-4 border-black px-4 py-2 font-black uppercase text-[10px] italic shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#FFD200] hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all group">
+        <ChevronLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
+        Landing
+      </button>
+    </Link>
+  </div>
 
-      <div className="pt-20 p-6 max-w-6xl mx-auto space-y-8">
-        
-        {/* 1. Header & Radar */}
-        <header className="border-b-4 border-black pb-6 flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="text-center md:text-left">
-            <h1 className="text-6xl font-black tracking-tighter uppercase italic">
-              WHALE<span className="text-[#326DD5]">SIGHT</span>
-            </h1>
-            <p className="font-mono text-sm mt-2 flex items-center gap-2 justify-center md:justify-start">
-              <span className="h-2 w-2 rounded-full bg-red-600 animate-ping" />
-              TARGET_ID: {activeAddress.slice(0, 14)}...
-            </p>
-          </div>
-          <ActivityRadar />
-        </header>
+  {/* 1. Header & Radar (Main Content Box) */}
+  <header className="border-b-4 border-black pb-6 flex flex-col md:flex-row justify-between items-center gap-6">
+    
+    {/* MOBILE ONLY LANDING BUTTON (Stays inside for small screens) */}
+    <div className="lg:hidden self-start mb-4">
+      <Link href="/">
+        <button className="flex items-center gap-2 bg-white border-4 border-black px-3 py-1.5 font-black uppercase text-[9px] italic shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+          <ChevronLeft className="w-3 h-3" />
+          Landing
+        </button>
+      </Link>
+    </div>
 
+    <div className="text-center md:text-left">
+      <h1 className="text-6xl font-black tracking-tighter uppercase italic leading-none">
+        WHALE<span className="text-[#326DD5]">SIGHT</span>
+      </h1>
+      <p className="font-mono text-sm mt-2 flex items-center gap-2 justify-center md:justify-start">
+        <span className="h-2 w-2 rounded-full bg-red-600 animate-ping" />
+        TARGET_ID: {activeAddress.slice(0, 14)}...
+      </p>
+    </div>
+    
+    <ActivityRadar />
+  </header>
         {/* 2. Intelligence Summary Bar */}
         <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[

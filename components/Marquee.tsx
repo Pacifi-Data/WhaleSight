@@ -13,7 +13,7 @@ const tickerText = [
 
 export function Marquee() {
   return (
-    <div className="absolute top-0 left-0 w-full bg-[#326DD5] text-[#FFD200] py-2 overflow-hidden border-b-4 flex">
+    <div className="absolute top-0 left-0 w-full bg-black text-[#FFD200] py-4 overflow-hidden border-b-4 flex">
       <motion.div
         className="flex whitespace-nowrap gap-10 items-center font-mono text-[10px] font-black uppercase tracking-widest"
         animate={{ x: ["0%", "-50%"] }} // Only need to move halfway if content is doubled
