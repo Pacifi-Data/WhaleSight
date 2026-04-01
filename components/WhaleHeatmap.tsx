@@ -11,8 +11,8 @@ export function WhaleHeatmap({ data }: { data: any[] }) {
   return (
     <div className="border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
       <div className="flex justify-between items-center mb-6 border-b-2 border-black pb-2">
-        <h3 className="text-xl font-black italic uppercase tracking-tighter">PACIFICA_ASSET_SCAN</h3>
-        <span className="bg-black text-white text-[10px] px-2 py-0.5 font-bold">LIVE_FEED</span>
+        <h3 className="text-xl font-black italic uppercase tracking-tighter">PACIFICA ASSET SCAN</h3>
+        <span className="bg-black text-white text-[10px] px-2 py-0.5 font-bold">LIVE FEED</span>
       </div>
       
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -34,10 +34,6 @@ export function WhaleHeatmap({ data }: { data: any[] }) {
             </div>
           );
         })}
-      </div>
-      <div className="mt-4 flex justify-between text-[8px] font-mono opacity-50 uppercase">
-        <span>THERMAL_INDEX_V4.02</span>
-        <span>SENSOR: PACIFICA_MAINFRAME</span>
       </div>
     </div>
   );

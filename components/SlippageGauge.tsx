@@ -18,7 +18,7 @@ export function SlippageGauge({ size, poolLiquidity = 100000 }: { size: string, 
   return (
     <div className="space-y-1 group">
       <div className="flex justify-between text-[8px] font-black uppercase mb-1">
-        <span>Exit_Impact</span>
+        <span>Exit Impact</span>
         <span className={impact > 5 ? "text-[#F2674A]" : "text-black"}>{impact.toFixed(2)}%</span>
       </div>
       <div className="h-3 border-2 border-black bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
@@ -28,7 +28,7 @@ export function SlippageGauge({ size, poolLiquidity = 100000 }: { size: string, 
         />
       </div>
       <p className="text-[7px] font-bold opacity-50 group-hover:opacity-100 transition-opacity uppercase">
-        {label} // EST_PRICE_SLIPPAGE
+        {label} // EST PRICE SLIPPAGE
       </p>
     </div>
   );

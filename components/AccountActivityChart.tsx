@@ -27,14 +27,14 @@ export function AccountActivityChart({ data, isLoading }: { data: any[], isLoadi
     }));
   }, [data]);
 
-  if (isLoading) return <div className="h-64 flex items-center justify-center font-black animate-pulse">LOADING_DATA_CHART...</div>;
+  if (isLoading) return <div className="h-64 flex items-center justify-center font-black animate-pulse">LOADING DATA CHART...</div>;
 
   return (
     <div className="h-80 w-full bg-white border-4 border-black p-8 relative flex items-end justify-around gap-2 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
       {/* Y-Axis Indicator Line */}
-      <div className="absolute left-0 w-full h-[2px] bg-black/10 border-dashed border-b bottom-[20%]" />
-      <div className="absolute left-0 w-full h-[2px] bg-black/10 border-dashed border-b bottom-[50%]" />
-      <div className="absolute left-0 w-full h-[2px] bg-black/10 border-dashed border-b bottom-[80%]" />
+      <div className="absolute left-0 w-full h-0.5 bg-black/10 border-dashed border-b bottom-[20%]" />
+      <div className="absolute left-0 w-full h-0.5 bg-black/10 border-dashed border-b bottom-[50%]" />
+      <div className="absolute left-0 w-full h-0.5 bg-black/10 border-dashed border-b bottom-[80%]" />
 
       {chartData.map((item, i) => (
         <div key={i} className="relative flex-1 flex flex-col items-center group h-full justify-end">
@@ -44,7 +44,7 @@ export function AccountActivityChart({ data, isLoading }: { data: any[], isLoadi
             initial={{ height: 0 }}
             animate={{ height: `${item.displayHeight}%` }}
             transition={{ type: "spring", stiffness: 120, damping: 12 }}
-            className="w-full max-w-[50px] bg-[#326DD5] border-4 border-black relative group-hover:bg-[#FFD200] transition-colors"
+            className="w-full max-w-12.5 bg-[#326DD5] border-4 border-black relative group-hover:bg-[#FFD200] transition-colors"
           >
             {/* Glossy Overlay */}
             <div className="absolute top-0 left-0 w-full h-full bg-white/10 pointer-events-none" />
@@ -69,7 +69,7 @@ export function AccountActivityChart({ data, isLoading }: { data: any[], isLoadi
 
       {/* Side Label */}
       <div className="absolute -left-10 top-1/2 -rotate-90 text-[10px] font-black uppercase tracking-widest text-slate-300">
-        Inventory_Weight
+        Inventory Weight
       </div>
     </div>
   );
