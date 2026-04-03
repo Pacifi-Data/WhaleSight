@@ -10,38 +10,52 @@ export default function LandingPage() {
     <PageTransition>
       <main className="min-h-screen md:h-screen w-full bg-[#F1E4ED] p-4 md:p-6 text-[#01033E] flex flex-col md:grid md:grid-rows-[auto_1fr_auto] selection:bg-[#947BFC]/20 overflow-x-hidden md:overflow-hidden gap-4 md:gap-6">
         
-        {/* 1. HEADER */}
-        <header className="max-w-7xl mx-auto w-full border-b-4 border-[#01033E] pb-2 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2">
-          <div>
-            <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic leading-none text-[#01033E]">
-              WHALE<span className="text-[#947BFC]">SIGHT</span>
-            </h1>
-            <p className="font-mono text-[10px] uppercase tracking-widest text-[#01033E]/60 mt-1">
-              Intelligent Whale Tracking // Pacifica Node v1.0
-            </p>
-          </div>
-          <div className="font-mono text-[9px] text-white uppercase flex items-center gap-1.5 bg-[#01033E] px-3 py-1 rounded-none border-2 border-black shadow-[2px_2px_0px_0px_rgba(148,123,252,1)]">
-            <div className="h-2 w-2 rounded-full bg-[#947BFC] animate-pulse" />
-            STATUS: UPLINK_READY
-          </div>
-        </header>
+ {/* 1. HEADER */}
+<header className="max-w-7xl mx-auto w-full border-b-4 border-[#01033E] pb-2 flex flex-col gap-4">
+  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2">
+    <div>
+      <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic leading-none text-[#01033E]">
+        WHALE<span className="text-[#947BFC]">SIGHT</span>
+      </h1>
+      <p className="font-mono text-[10px] uppercase tracking-widest text-[#01033E]/60 mt-1">
+        Intelligent Whale Tracking
+      </p>
+    </div>
+    
+    {/* This div now sits on the left by default on mobile, but aligns right on desktop if you prefer */}
+    <div className="font-mono text-[9px] text-white uppercase flex items-center gap-1.5 bg-[#01033E] px-3 py-1 rounded-none border-2 border-black shadow-[2px_2px_0px_0px_rgba(148,123,252,1)] self-start sm:self-auto">
+      <div className="h-2 w-2 rounded-full bg-[#947BFC] animate-pulse" />
+      STATUS: READY
+    </div>
+  </div>
+</header>
 
         {/* 2. HERO AREA */}
         <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col md:grid md:grid-cols-2 border-4 border-[#01033E] bg-white shadow-[12px_12px_0px_0px_rgba(1,3,62,1)] min-h-0 overflow-hidden relative">
           
-          {/* MOBILE TEXT CONTENT */}
-          <div className="flex md:hidden flex-col p-6 space-y-3 bg-white order-1">
-            <div className="inline-block self-start bg-[#947BFC] text-white border-2 border-black px-2 py-0.5 text-[10px] font-black uppercase">
-              SYSTEM_READY
-            </div>
-            <h2 className="text-4xl font-black uppercase leading-[0.9] tracking-tighter italic text-[#01033E]">
-              Identify <br />
-              <span className="text-[#326DD5]">Movement.</span>
-            </h2>
-            <p className="text-xs max-w-sm leading-tight border-l-4 border-[#947BFC] pl-4 font-medium italic text-[#01033E]/70">
-              Real-time intent analysis for Pacifica. Decode whale behavior through social alpha.
-            </p>
-          </div>
+{/* MOBILE TEXT CONTENT */}
+<div className="flex md:hidden flex-col p-6 space-y-4 bg-white order-1">
+  <div className="inline-block self-start bg-[#947BFC] text-white border-2 border-black px-2 py-0.5 text-[10px] font-black uppercase">
+    SYSTEM READY
+  </div>
+  <h2 className="text-4xl font-black uppercase leading-[0.9] tracking-tighter italic text-[#01033E]">
+    Identify <br />
+    <span className="text-[#326DD5]">Movement.</span>
+  </h2>
+  <p className="text-xs max-w-sm leading-tight border-l-4 border-[#947BFC] pl-4 font-medium italic text-[#01033E]/70">
+    Real-time intent analysis for Pacifica. Decode whale behavior through social alpha
+  </p>
+
+  {/* ADDED BUTTON FOR MOBILE SIZE */}
+  <div className="pt-2">
+    <Link 
+      href="/dashboard" 
+      className="inline-block w-full text-center bg-[#947BFC] text-white border-4 border-black py-3 px-6 text-sm font-black uppercase hover:bg-[#01033E] transition-all shadow-[6px_6px_0px_0px_rgba(1,3,62,1)] active:translate-y-1 active:shadow-none"
+    >
+      Launch Application
+    </Link>
+  </div>
+</div>
 
           {/* WHALE IMAGE - PURPLE THEME */}
           <div className="relative flex items-center justify-center bg-[#01033E] p-2 md:p-6 order-2 h-72 md:h-full overflow-hidden group border-b-4 md:border-b-0 border-[#01033E]">
@@ -69,7 +83,7 @@ export default function LandingPage() {
               <div className="absolute top-0 right-0 w-8 h-8 bg-[#947BFC] border-l-4 border-b-4 border-black z-40" />
 
               <div className="absolute bottom-0 left-0 bg-[#01033E] text-white px-2 py-1 font-mono text-[9px] uppercase tracking-tighter z-40">
-                RADAR_ID: <span className="text-[#947BFC]">ALPHA_PACIFICA</span>
+                RADAR: <span className="text-[#947BFC]">ALPHA PACIFICA</span>
               </div>
             </motion.div>
           </div>
