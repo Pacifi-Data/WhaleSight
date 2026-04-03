@@ -13,11 +13,11 @@ const tickerText = [
 
 export function Marquee() {
   return (
-    // Changed 'absolute' to 'fixed' and added 'z-50' to keep it on top
-    <div className="fixed top-0 left-0 w-full bg-black text-[#FFD200] py-4 overflow-hidden border-b-4 border-[#326DD5] flex z-50">
+    // Updated to Deep Navy background with the Blue bottom border
+    <div className="fixed top-0 left-0 w-full bg-[#01033E] text-[#947BFC] py-3 overflow-hidden border-b-4 border-[#326DD5] flex z-50 shadow-[0px_4px_10px_rgba(0,0,0,0.3)]">
       <motion.div
         className="flex whitespace-nowrap gap-10 items-center font-mono text-[10px] font-black uppercase tracking-widest"
-        animate={{ x: [0, -1000] }} // Using pixel values can be more stable for Framer Motion
+        animate={{ x: [0, -1000] }} 
         transition={{
           ease: "linear",
           duration: 30,
@@ -27,7 +27,8 @@ export function Marquee() {
         {[...tickerText, ...tickerText, ...tickerText].map((text, i) => (
           <span key={i} className="flex items-center gap-10">
             {text}
-            <span className="w-2 h-2 bg-[#F2674A] rounded-none" />
+            {/* Separator changed to brand Blue */}
+            <span className="w-2.5 h-2.5 bg-[#326DD5] border border-black rotate-45 shrink-0" />
           </span>
         ))}
       </motion.div>

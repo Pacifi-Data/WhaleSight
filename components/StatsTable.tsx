@@ -13,19 +13,19 @@ interface WhalePosition {
 export function StatsTable({ data, loading }: { data: WhalePosition[], loading: boolean }) {
   if (loading) {
     return (
-      <div className="p-20 bg-white border-4 border-black flex flex-col items-center justify-center shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]">
-        <div className="w-10 h-10 border-4 border-black border-t-[#326DD5] rounded-full animate-spin mb-4" />
-        <p className="font-black italic uppercase tracking-widest text-sm">Synchronizing Table...</p>
+      <div className="p-20 bg-[#F1E4ED] border-4 border-black flex flex-col items-center justify-center shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]">
+        <div className="w-10 h-10 border-4 border-black border-t-[#947BFC] rounded-full animate-spin mb-4" />
+        <p className="font-black italic uppercase tracking-widest text-sm text-[#01033E]">Synchronizing Table...</p>
       </div>
     );
   }
 
   return (
     <div className="w-full space-y-0 font-sans">
-      {/* 1. SECTION TITLE - MATCHED TO ASSET SCAN SIZE */}
+      {/* 1. SECTION TITLE - MATCHED TO PALETTE */}
       <div className="bg-[#326DD5] border-4 border-black p-4 flex justify-between items-center shadow-[4px_0px_0px_0px_rgba(0,0,0,1)]">
         <div className="flex items-center gap-3">
-          <div className="h-3 w-3 bg-[#FFD200] rounded-full animate-pulse border-2 border-black" />
+          <div className="h-3 w-3 bg-[#947BFC] rounded-full animate-pulse border-2 border-black" />
           <h2 className="text-white font-black uppercase tracking-tighter text-xl italic leading-none">
             Market Depth Analysis
           </h2>
@@ -44,8 +44,7 @@ export function StatsTable({ data, loading }: { data: WhalePosition[], loading: 
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[700px]">
             <thead>
-              {/* TABLE HEADERS - SCALED FOR BEGINNER CLARITY */}
-              <tr className="border-b-4 border-black bg-slate-50 text-[11px] font-black uppercase tracking-tight">
+              <tr className="border-b-4 border-black bg-[#F1E4ED] text-[11px] font-black uppercase tracking-tight text-[#01033E]">
                 <th className="p-4 border-r-4 border-black w-[20%]">Token Name</th>
                 <th className="p-4 border-r-4 border-black text-center w-[20%]">Total Held</th>
                 <th className="p-4 border-r-4 border-black w-[40%] text-center">Sell Risk (SPI)</th>
@@ -64,16 +63,17 @@ export function StatsTable({ data, loading }: { data: WhalePosition[], loading: 
                       initial={{ opacity: 0, x: -5 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.03 }}
-                      className="border-b-2 border-black last:border-b-0 hover:bg-slate-50 transition-colors group"
+                      className="border-b-2 border-black last:border-b-0 hover:bg-[#F1E4ED]/30 transition-colors group"
                     >
                       <td className="p-4 border-r-4 border-black">
-                        <span className="text-xl font-black italic uppercase tracking-tighter group-hover:text-[#326DD5] transition-colors">
+                        <span className="text-xl font-black italic uppercase tracking-tighter text-[#01033E] group-hover:text-[#326DD5] transition-colors">
                           ${pos.asset}
                         </span>
                       </td>
 
                       <td className="p-4 border-r-4 border-black text-center font-mono font-bold">
-                        <span className="bg-black text-white px-2 py-0.5 text-xs shadow-[2px_2px_0px_0px_rgba(255,210,0,1)] inline-block">
+                        {/* MATCHES HEATMAP SIZE BOX */}
+                        <span className="bg-[#01033E] text-white px-3 py-1 text-xs shadow-[2px_2px_0px_0px_rgba(148,123,252,1)] inline-block uppercase tracking-tighter">
                           {pos.size}
                         </span>
                       </td>
@@ -85,11 +85,11 @@ export function StatsTable({ data, loading }: { data: WhalePosition[], loading: 
                                 initial={{ width: 0 }}
                                 animate={{ width: `${score}%` }}
                                 className={`h-full border-r-2 border-black transition-colors duration-500
-                                  ${isHighPressure ? 'bg-[#F2674A]' : 'bg-[#326DD5]'}
+                                  ${isHighPressure ? 'bg-[#947BFC]' : 'bg-[#326DD5]'}
                                 `}
                               />
                            </div>
-                           <span className={`text-[10px] font-black w-8 text-right ${isHighPressure ? 'text-[#F2674A]' : 'text-black'}`}>
+                           <span className={`text-[10px] font-black w-8 text-right ${isHighPressure ? 'text-[#947BFC]' : 'text-[#01033E]'}`}>
                              {score}%
                            </span>
                         </div>
@@ -97,7 +97,7 @@ export function StatsTable({ data, loading }: { data: WhalePosition[], loading: 
 
                       <td className="p-4 text-right">
                         <div className={`inline-block border-2 border-black px-2 py-0.5 text-[9px] font-black uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
-                          ${pos.whaleAlert ? 'bg-[#F2674A] text-white animate-pulse' : 'bg-[#FFD200] text-black'}
+                          ${pos.whaleAlert ? 'bg-[#947BFC] text-white animate-pulse' : 'bg-[#326DD5] text-white'}
                         `}>
                           {pos.whaleAlert ? 'Selling Now' : 'Holding Tight'}
                         </div>
@@ -111,20 +111,20 @@ export function StatsTable({ data, loading }: { data: WhalePosition[], loading: 
         </div>
       </motion.div>
 
-      {/* 3. METRIC LEGEND (SINGLE LINE) */}
+      {/* 3. METRIC LEGEND */}
       <motion.div 
         initial={{ opacity: 0, y: 5 }}
         animate={{ opacity: 1, y: 0 }}
-        className="p-3 bg-black text-white border-x-4 border-b-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+        className="p-3 bg-[#01033E] text-white border-x-4 border-b-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
       >
         <div className="flex items-center gap-4 overflow-hidden">
           <p className="text-[10px] font-medium uppercase tracking-tight whitespace-nowrap">
-            <span className="text-[#FFD200] font-black mr-3 border-r border-white/20 pr-3">
+            <span className="text-[#947BFC] font-black mr-3 border-r border-white/20 pr-3">
               Metric: SPI
             </span>
-            Difficulty to sell without price impact. 
-            <span className="text-[#F2674A] font-bold mx-2 italic underline underline-offset-2 decoration-1">Red (70%+)</span> high risk. 
-            <span className="text-[#326DD5] font-bold mx-2 italic underline underline-offset-2 decoration-1">Blue</span> safe liquidity.
+            Price Impact Risk. 
+            <span className="text-[#947BFC] font-bold mx-2 italic underline underline-offset-2 decoration-1">Purple (70%+)</span> Whale. 
+            <span className="text-[#326DD5] font-bold mx-2 italic underline underline-offset-2 decoration-1">Blue</span> Growth.
           </p>
           
           <div className="flex-1 border-b border-white/10 hidden md:block" />
@@ -134,7 +134,7 @@ export function StatsTable({ data, loading }: { data: WhalePosition[], loading: 
               <div className="w-2 h-2 bg-[#326DD5]" /> Stable
             </div>
             <div className="flex items-center gap-1.5 text-[8px] font-black uppercase">
-              <div className="w-2 h-2 bg-[#F2674A]" /> Risk
+              <div className="w-2 h-2 bg-[#947BFC]" /> Whale
             </div>
           </div>
         </div>
