@@ -1,39 +1,103 @@
 "use client";
 
+import React from "react";
+
 export function WhaleHeatmap({ data }: { data: any[] }) {
-  const getIntensityColor = (score: number) => {
-    if (score >= 85) return "bg-[#F2674A]"; // Red/Orange (Critical/Heavy)
-    if (score >= 60) return "bg-[#326DD5]"; // Blue (Stable)
-    if (score >= 40) return "bg-[#FFD200]"; // Yellow (Moderate)
-    return "bg-slate-100"; // Grey (Low)
+  // 1. DATA VALIDATION & SORTING (Big to Small from Left to Right)
+  const validData = data
+    ?.filter(item => {
+      const amount = parseFloat(String(item.amount).replace(/,/g, ''));
+      return !isNaN(amount) && amount > 0;
+    })
+    .sort((a, b) => {
+      const amtA = parseFloat(String(a.amount).replace(/,/g, ''));
+      const amtB = parseFloat(String(b.amount).replace(/,/g, ''));
+      return amtB - amtA; // Sort Descending
+    }) || [];
+
+  // 2. CALCULATE GLOBAL TOTAL
+  const globalTotal = validData.reduce((sum, item) => 
+    sum + parseFloat(String(item.amount).replace(/,/g, '')), 0
+  );
+
+  // 3. COLOR SCALE
+  const getAmountColor = (ratio: number) => {
+    if (ratio >= 0.40) return "bg-[#F2674A]"; 
+    if (ratio >= 0.15) return "bg-[#326DD5]"; 
+    return "bg-[#1A2333]";                  
   };
 
   return (
-    <div className="border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-      <div className="flex justify-between items-center mb-6 border-b-2 border-black pb-2">
-        <h3 className="text-xl font-black italic uppercase tracking-tighter">PACIFICA ASSET SCAN</h3>
-        <span className="bg-black text-white text-[10px] px-2 py-0.5 font-bold">LIVE FEED</span>
+    <div className="border-4 border-black bg-white p-6 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] w-full max-w-full">
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-6 border-b-4 border-black pb-3">
+        <h3 className="text-xl font-black italic uppercase tracking-tighter text-black">
+          Asset Heatmap
+        </h3>
+        <div className="flex items-center gap-2 text-slate-500 font-black text-[9px] uppercase italic shrink-0">
+           <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+           Inventory Scaled
+        </div>
       </div>
       
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-        {data?.map((item, i) => {
-          const score = parseInt(item.alpha_score) || 0;
+      {/* HEATMAP CONTAINER */}
+      <div className="flex w-full border-4 border-black bg-black p-1 overflow-hidden h-[140px]">
+        {validData.map((item, i) => {
+          const amount = parseFloat(String(item.amount).replace(/,/g, ''));
+          const ratio = (amount / globalTotal);
+          const percentage = (ratio * 100).toFixed(1);
+
+          // If the box is less than 15% of the width, shrink the text to keep it visible
+          const isSmall = ratio < 0.15;
+
           return (
-            <div key={i} className={`p-4 border-2 border-black relative overflow-hidden ${getIntensityColor(score)}`}>
-              {/* Carbon fiber texture overlay */}
-              <div className="absolute inset-0 opacity-10 pointer-events-none" 
-                   style={{ backgroundImage: `glitch-texture-url-here` }} />
-              
-              <div className="relative z-10 flex justify-between items-start">
-                <span className="text-2xl font-black text-white drop-shadow-md">${item.asset}</span>
-                <span className="text-[10px] font-black bg-black text-white px-1">{score}%</span>
-              </div>
-              <div className="relative z-10 mt-4">
-                <p className="text-[8px] font-bold text-white uppercase opacity-80">INTENT: {item.strategic_intent}</p>
+            <div 
+              key={i} 
+              style={{ 
+                flex: `${amount} 1 0%`,
+                minWidth: '85px' // This is the "sweet spot" to ensure $SOL is visible
+              }}
+              className={`h-full border-2 border-black relative transition-all overflow-hidden shrink ${getAmountColor(ratio)}`}
+            >
+              <div className="p-3 h-full flex flex-col justify-between relative z-10">
+                <div className={`flex ${isSmall ? 'flex-col gap-0' : 'justify-between items-start gap-1'}`}>
+                  {/* TOKEN NAME: Automatically scales to fit */}
+                  <span className={`font-black text-white italic leading-none uppercase truncate ${isSmall ? 'text-sm mb-1' : 'text-xl md:text-2xl'}`}>
+                    ${item.asset}
+                  </span>
+                  
+                  {/* % BADGE */}
+                  <span className="bg-black/60 text-[7px] text-white px-1 font-mono font-bold border border-white/10 self-start">
+                    {percentage}%
+                  </span>
+                </div>
+                
+                {/* SIZE DISPLAY */}
+                <div className="mt-auto bg-black/30 p-1.5 border-t border-white/10 -mx-3 -mb-3">
+                  <p className={`font-black text-white leading-none uppercase tracking-tighter truncate ${isSmall ? 'text-[9px]' : 'text-[11px]'}`}>
+                    SIZE: {item.amount.toLocaleString()}
+                  </p>
+                </div>
               </div>
             </div>
           );
         })}
+      </div>
+
+      {/* FOOTER LEGEND */}
+      <div className="mt-6 flex flex-wrap gap-6 text-[11px] font-black uppercase italic tracking-tight text-black">
+        <div className="flex items-center gap-2">
+          <div className="w-5 h-5 bg-[#F2674A] border-2 border-black" /> 
+          <span>Whale Position</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-5 h-5 bg-[#326DD5] border-2 border-black" /> 
+          <span>Growth Position</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-5 h-5 bg-[#1A2333] border-2 border-black" /> 
+          <span>Entry Position</span>
+        </div>
       </div>
     </div>
   );
